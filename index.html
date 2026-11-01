@@ -481,7 +481,7 @@ function renderDetail(){
   const t=todayKey(),cols=20,start=addKey(weekStart(t),-7*(cols-1));let heat="",months="",lastM=-1;
   for(let c=0;c<cols;c++){const mk=addKey(start,7*c),mi=monthIdx(mk);months+='<span style="width:19px;flex:none;text-align:center">'+(mi!==lastM?LC.monS[mi]:"")+'</span>';lastM=mi;}
   for(let c=0;c<cols;c++)for(let r=0;r<7;r++){const k=addKey(start,c*7+r);let cls="hcell";
-    if(between(createdOf(h),k)<0||between(k,t)>0)cls+=" out";else{cls+=" tap";if(isDone(h.id,k))cls+=" done";if(k===t)cls+=" today";}
+    if(between(createdOf(h),k)<0||between(k,t)<0)cls+=" out";else{cls+=" tap";if(isDone(h.id,k))cls+=" done";if(k===t)cls+=" today";}
     heat+='<div class="'+cls+'" data-hc="'+k+'"></div>';}
   const dowBars=dws.map((v,i)=>'<div class="dowcol"><div class="dowbar"><i style="height:'+Math.round(v*100)+'%"></i></div><div class="dowlab">'+LC.wdS[i]+'</div></div>').join("");
   const worst=dws.indexOf(Math.min(...dws));
@@ -504,7 +504,7 @@ function go(tab){curTab=tab;document.querySelectorAll(".screen").forEach(s=>s.cl
 
 /* ---------- actions ---------- */
 function toggle(id,k){k=k||todayKey();const h=state.habits.find(x=>x.id===id);if(!h)return;
-  if(between(createdOf(h),k)<0||between(k,todayKey())>0)return;
+  if(between(createdOf(h),k)<0||between(k,todayKey())<0)return;
   if(!state.logs[id])state.logs[id]={};if(state.logs[id][k])delete state.logs[id][k];else state.logs[id][k]=1;touch();renderAll();}
 function openHabitSheet(id){editingId=id||null;const h=id?state.habits.find(x=>x.id===id):null;
   $("hsTitle").textContent=h?S.edit_habit:S.new_habit;$("hsName").value=h?h.name:"";pickedEmoji=h?h.emoji:EMOJIS[0];
